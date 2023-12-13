@@ -21,11 +21,13 @@ for (let x = 0; x < 15; x++) {
     });
     piece.addEventListener('click', () => {
       if (game.winner || piece.getAttribute('fill-opacity') === '1') return;
+      if (game.aiMode && game.aiTurn) return;
       piece.setAttribute('fill', game.black ? 'url(#black)' : 'url(#white)');
       piece.setAttribute('fill-opacity', '1');
       dropPiece(x, y);
       if (!game.winner) {
         game.black = !game.black;
+        game.aiTurn = !game.black;
       }
     });
     svg.appendChild(piece);
@@ -117,5 +119,26 @@ const Message = (content) => {
 };
 
 const game = {
-  black: true
+  black: true,
+  winner: null,
+  aiTurn: false,
+  aiMode: true
 };
+
+setInterval(() => {
+  if (game.aiTurn && !game.winner) {
+    let x, y;
+    do {
+      x = Math.floor(Math.random() * 15);
+      y = Math.floor(Math.random() * 15);
+    } while (pieces[x][y].getAttribute('fill-opacity') === '1');
+    pieces[x][y].setAttribute(
+        'fill', game.black ? 'url(#black)' : 'url(#white)');
+    pieces[x][y].setAttribute('fill-opacity', '1');
+    dropPiece(x, y);
+    if (!game.winner) {
+      game.black = !game.black;
+      game.aiTurn = !game.black;
+    }
+  }
+}, 1000);

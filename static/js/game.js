@@ -120,25 +120,34 @@ const Message = (content) => {
 
 const game = {
   black: true,
+  initialPlayer: 'black',
   winner: null,
   aiTurn: false,
   aiMode: true
+
 };
 
 setInterval(() => {
   if (game.aiTurn && !game.winner) {
-    let x, y;
-    do {
-      x = Math.floor(Math.random() * 15);
-      y = Math.floor(Math.random() * 15);
-    } while (pieces[x][y].getAttribute('fill-opacity') === '1');
-    pieces[x][y].setAttribute(
-        'fill', game.black ? 'url(#black)' : 'url(#white)');
-    pieces[x][y].setAttribute('fill-opacity', '1');
-    dropPiece(x, y);
-    if (!game.winner) {
-      game.black = !game.black;
-      game.aiTurn = !game.black;
-    }
+    fetch('/get-ai-move', {
+      method: 'POST',
+      body: JSON.stringify({
+        board: pieces,
+        aiPlayer: game.initialPlayer === 'black' ? 'white' : 'black'
+      }),
+      headers: {'Content-Type': 'application/json'}
+    })
+        .then(response => response.json())
+        .then(data => {
+          const {x, y} = data;
+          pieces[x][y].setAttribute(
+              'fill', game.black ? 'url(#black)' : 'url(#white)');
+          pieces[x][y].setAttribute('fill-opacity', '1');
+          dropPiece(x, y);
+          if (!game.winner) {
+            game.black = !game.black;
+            game.aiTurn = !game.black;
+          }
+        });
   }
 }, 1000);

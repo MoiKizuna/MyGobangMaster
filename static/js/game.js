@@ -20,11 +20,13 @@ for (let x = 0; x < 15; x++) {
       piece.setAttribute('fill-opacity', '0');
     });
     piece.addEventListener('click', () => {
-      if (piece.getAttribute('fill-opacity') === '1') return;
+      if (game.winner || piece.getAttribute('fill-opacity') === '1') return;
       piece.setAttribute('fill', game.black ? 'url(#black)' : 'url(#white)');
       piece.setAttribute('fill-opacity', '1');
       dropPiece(x, y);
-      game.black = !game.black;
+      if (!game.winner) {
+        game.black = !game.black;
+      }
     });
     svg.appendChild(piece);
   }

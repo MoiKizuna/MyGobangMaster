@@ -1,35 +1,178 @@
 <!DOCTYPE html>
 <html lang="en" style="height: 100%">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" href="https://fe-1255520126.file.myqcloud.com/gobang/favicon.ico">
   <title>MyGobangMaster</title>
 </head>
+
 <body style="height: 100%; margin: 0; background: rgb(249, 222, 190)">
-<style>
-.message {-webkit-box-sizing: border-box;box-sizing: border-box;margin: 0;padding: 0;color: rgba(0,0,0,.85);font-size: 14px;font-variant: tabular-nums;line-height: 1.5715;list-style: none;-webkit-font-feature-settings: "tnum";font-feature-settings: "tnum";position: fixed;top: 8px;left: 0;z-index: 1010;width: 100%;pointer-events: none;text-align: center;}
-.message > div {padding: 6px;}
-.message > div > div {display: inline-block;padding: 12px 18px;background: #fff;border-radius: 2px;-webkit-box-shadow: 0 3px 6px -4px rgba(0,0,0,.12), 0 6px 16px 0 rgba(0,0,0,.08), 0 9px 28px 8px rgba(0,0,0,.05);box-shadow: 0 3px 6px -4px rgba(0,0,0,.12), 0 6px 16px 0 rgba(0,0,0,.08), 0 9px 28px 8px rgba(0,0,0,.05);pointer-events: all;}
-</style>
-<div id="message" class="message"></div>
-<svg id="svg" viewBox="-76,-76,152,152" style="height: 100%; width: 100%" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <radialGradient id="black">
-      <stop offset="0%" style="stop-color:#808080" />
-      <stop offset="100%" style="stop-color:#111" />
-    </radialGradient>
-    <radialGradient id="white">
-      <stop offset="0%" style="stop-color:#fff" />
-      <stop offset="100%" style="stop-color:#ddd" />
-    </radialGradient>
-    <rect id="mark" x="-1" y="-1" width="2" height="2"/>
-    <circle id="piece" r="4.2"/>
-  </defs>
-  <path stroke="brown" stroke-width="0.5" fill="none" d="m-70,-70h140v140h-140zm10,0v140m10,0v-140m10,0v140m10,0v-140m10,0v140m10,0v-140m10,0v140m10,0v-140m10,0v140m10,0v-140m10,0v140m10,0v-140m10,0v140m10,-10h-140m0,-10h140m0,-10h-140m0,-10h140m0,-10h-140m0,-10h140m0,-10h-140m0,-10h140m0,-10h-140m0,-10h140m0,-10h-140m0,-10h140m0,-10h-140"/>
-  <use xlink:href="#mark"/>
-  <use xlink:href="#mark" x="40" y="40"/>
-  <use xlink:href="#mark" x="40" y="-40"/>
-  <use xlink:href="#mark" x="-40" y="40"/>
-  <use xlink:href="#mark" x="-40" y="-40"/>
-</svg>
+  <style>
+    .message {
+      -webkit-box-sizing: border-box;
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      color: rgba(0, 0, 0, .85);
+      font-size: 14px;
+      font-variant: tabular-nums;
+      line-height: 1.5715;
+      list-style: none;
+      -webkit-font-feature-settings: "tnum";
+      font-feature-settings: "tnum";
+      position: fixed;
+      top: 8px;
+      left: 0;
+      z-index: 1010;
+      width: 100%;
+      pointer-events: none;
+      text-align: center;
+    }
+
+    .message>div {
+      padding: 6px;
+    }
+
+    .message>div>div {
+      display: inline-block;
+      padding: 12px 18px;
+      background: #fff;
+      border-radius: 2px;
+      -webkit-box-shadow: 0 3px 6px -4px rgba(0, 0, 0, .12), 0 6px 16px 0 rgba(0, 0, 0, .08), 0 9px 28px 8px rgba(0, 0, 0, .05);
+      box-shadow: 0 3px 6px -4px rgba(0, 0, 0, .12), 0 6px 16px 0 rgba(0, 0, 0, .08), 0 9px 28px 8px rgba(0, 0, 0, .05);
+      pointer-events: all;
+    }
+  </style>
+  <div id="message" class="message"></div>
+  <svg id="svg" viewBox="-76,-76,152,152" style="height: 100%; width: 100%" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <radialGradient id="black">
+        <stop offset="0%" style="stop-color:#808080" />
+        <stop offset="100%" style="stop-color:#111" />
+      </radialGradient>
+      <radialGradient id="white">
+        <stop offset="0%" style="stop-color:#fff" />
+        <stop offset="100%" style="stop-color:#ddd" />
+      </radialGradient>
+      <rect id="mark" x="-1" y="-1" width="2" height="2" />
+      <circle id="piece" r="4.2" />
+    </defs>
+    <path stroke="brown" stroke-width="0.5" fill="none"
+      d="m-70,-70h140v140h-140zm10,0v140m10,0v-140m10,0v140m10,0v-140m10,0v140m10,0v-140m10,0v140m10,0v-140m10,0v140m10,0v-140m10,0v140m10,0v-140m10,0v140m10,-10h-140m0,-10h140m0,-10h-140m0,-10h140m0,-10h-140m0,-10h140m0,-10h-140m0,-10h140m0,-10h-140m0,-10h140m0,-10h-140m0,-10h140m0,-10h-140" />
+    <use xlink:href="#mark" />
+    <use xlink:href="#mark" x="40" y="40" />
+    <use xlink:href="#mark" x="40" y="-40" />
+    <use xlink:href="#mark" x="-40" y="40" />
+    <use xlink:href="#mark" x="-40" y="-40" />
+  </svg>
+  <script>
+    const svg = document.getElementById('svg');
+    const pieces = [];
+    for (let x = 0; x < 15; x++) {
+      pieces.push([]);
+      for (let y = 0; y < 15; y++) {
+        const piece = document.createElementNS('http://www.w3.org/2000/svg', 'use');
+        pieces[x].push(piece);
+        piece.setAttribute('x', (x * 10 - 70).toString());
+        piece.setAttribute('y', (y * 10 - 70).toString());
+        piece.setAttribute('fill-opacity', '0');
+        piece.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', '#piece');
+        piece.addEventListener('mouseenter', () => {
+          if (piece.getAttribute('fill-opacity') === '1') return;
+          piece.setAttribute('fill', game.black ? 'url(#black)' : 'url(#white)');
+          piece.setAttribute('fill-opacity', '0.5');
+        });
+        piece.addEventListener('mouseleave', () => {
+          if (piece.getAttribute('fill-opacity') === '1') return;
+          piece.setAttribute('fill-opacity', '0');
+        });
+        piece.addEventListener('click', () => {
+          if (piece.getAttribute('fill-opacity') === '1') return;
+          piece.setAttribute('fill', game.black ? 'url(#black)' : 'url(#white)');
+          piece.setAttribute('fill-opacity', '1');
+          dropPiece(x, y);
+          game.black = !game.black;
+        });
+        svg.appendChild(piece);
+      }
+    }
+
+    const mark = document.createElementNS("http://www.w3.org/2000/svg", 'rect');
+    mark.setAttribute('fill', 'red');
+    mark.setAttribute('width', '2');
+    mark.setAttribute('height', '2');
+    mark.setAttribute('opacity', '0');
+    svg.appendChild(mark);
+
+    const dropPiece = (x, y) => {
+      mark.setAttribute('x', (x * 10 - 71).toString());
+      mark.setAttribute('y', (y * 10 - 71).toString());
+      mark.setAttribute('opacity', '0.7');
+      game.winner = checkWinner(x, y);
+      if (game.winner) {
+        Message(`游戏结束，${game.winner === 'black' ? '黑' : '白'}棋胜利！`);
+      }
+    };
+
+    const checkWinner = (x, y) => {
+      const color = pieces[x][y].getAttribute('fill');
+      const potentialWinner = color === 'url(#black)' ? 'black' : 'white';
+      const list = [4, 3, 2, 1];
+      if (x >= 4) {
+        if (!list.some(i => pieces[x - i][y].getAttribute('fill-opacity') !== '1' || pieces[x - i][y].getAttribute('fill') !== color)) {
+          return potentialWinner;
+        }
+        if (y >= 4 && !list.some(i => pieces[x - i][y - i].getAttribute('fill-opacity') !== '1' || pieces[x - i][y - i].getAttribute('fill') !== color)) {
+          return potentialWinner;
+        }
+        if (y <= 10 && !list.some(i => pieces[x - i][y + i].getAttribute('fill-opacity') !== '1' || pieces[x - i][y + i].getAttribute('fill') !== color)) {
+          return potentialWinner;
+        }
+      }
+      if (x <= 10) {
+        if (!list.some(i => pieces[x + i][y].getAttribute('fill-opacity') !== '1' || pieces[x + i][y].getAttribute('fill') !== color)) {
+          return potentialWinner;
+        }
+        if (y >= 4 && !list.some(i => pieces[x + i][y - i].getAttribute('fill-opacity') !== '1' || pieces[x + i][y - i].getAttribute('fill') !== color)) {
+          return potentialWinner;
+        }
+        if (y <= 10 && !list.some(i => pieces[x + i][y + i].getAttribute('fill-opacity') !== '1' || pieces[x + i][y + i].getAttribute('fill') !== color)) {
+          return potentialWinner;
+        }
+      }
+      if (y >= 4) {
+        if (!list.some(i => pieces[x][y - i].getAttribute('fill-opacity') !== '1' || pieces[x][y - i].getAttribute('fill') !== color)) {
+          return potentialWinner;
+        }
+      }
+      if (y <= 10) {
+        if (!list.some(i => pieces[x][y + i].getAttribute('fill-opacity') !== '1' || pieces[x][y + i].getAttribute('fill') !== color)) {
+          return potentialWinner;
+        }
+      }
+      return null;
+    };
+
+    const messageDiv = document.getElementById('message');
+    const Message = (content) => {
+      const div = document.createElement('div');
+      div.innerHTML = `<div>${content}</div>`;
+      messageDiv.appendChild(div);
+      setTimeout(() => messageDiv.removeChild(div), 3000);
+    };
+
+    const game = { black: true }; // 默认先手为黑棋
+
+    // 添加选择先手的功能
+    const chooseFirstMove = (color) => {
+      game.black = (color === 'black');
+    };
+
+    // 示例：选择白棋为先手
+    chooseFirstMove('black');
+  </script>
+</body>
+
+</html>

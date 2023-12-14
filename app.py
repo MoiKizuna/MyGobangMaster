@@ -1,11 +1,11 @@
 from flask import Flask, render_template, request, jsonify
-from alphabeta import calculate_ai_move
+from AI import *
 import logging
 
 app = Flask(__name__)
 
 app.logger.setLevel(logging.INFO)
-app.logger.addHandler(logging.StreamHandler())
+# app.logger.addHandler(logging.StreamHandler())
 
 
 @app.route('/')
@@ -20,7 +20,6 @@ def get_ai_move():
     ai_player = data['aiPlayer']
     app.logger.info('board: %s', board)
     app.logger.info('ai_player: %s', ai_player)
-
     move = calculate_ai_move(board, ai_player)
     if move is None:
         return jsonify({'error': 'No valid move available.'})

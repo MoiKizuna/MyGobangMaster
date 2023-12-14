@@ -1,6 +1,6 @@
 const svg = document.getElementById('svg');
 const pieces = [];
-const board = [];  // 在board中我们用0表示空，1表示黑棋，-1表示白棋
+const board = [];  // 在board中我们用0表示空，1表示黑棋，2表示白棋
 for (let i = 0; i < 15; i++) {
   board.push([]);
   for (let j = 0; j < 15; j++) {
@@ -57,7 +57,7 @@ const dropPiece = (x, y) => {
   mark.setAttribute('opacity', '0.7');
   game.winner = checkWinner(x, y);
   if (game.winner) {
-    Message(`游戏结束，${game.winner === 'black' ? '黑' : '白'}棋胜利！`);
+    Message(`游戏结束，${game.winner === 1 ? '黑' : '白'}棋胜利！`);
   }
 };
 
@@ -131,7 +131,7 @@ const Message = (content) => {
 const game = {
   black_turn: true,
   player_color: 1,
-  ai_mode: false,
+  ai_mode: true,
   winner: null,
   ai_turn: false
 };
@@ -141,7 +141,7 @@ setInterval(() => {
     fetch('/get-ai-move', {
       method: 'POST',
       body: JSON.stringify(
-          {board: board, aiPlayer: game.player_color === 1 ? -1 : 1}),
+          {board: board, aiPlayer: game.player_color === 1 ? 2 : 1}),
       headers: {'Content-Type': 'application/json'}
     })
         .then(response => response.json())
@@ -151,7 +151,7 @@ setInterval(() => {
               'fill', game.black_turn ? 'url(#black)' : 'url(#white)');
           pieces[x][y].setAttribute('fill-opacity', '1');
           dropPiece(x, y);
-          board[x][y] = game.player_color ? -1 : 1;
+          board[x][y] = game.player_color ? 2 : 1;
           if (!game.winner) {
             game.black_turn = !game.black_turn;
             game.ai_turn = !game.ai_turn;

@@ -1,5 +1,12 @@
 const svg = document.getElementById('svg');
 const pieces = [];
+const board = [];  // 在board中我们用0表示空，1表示黑棋，-1表示白棋
+for (let i = 0; i < 15; i++) {
+  board.push([]);
+  for (let j = 0; j < 15; j++) {
+    board[i].push(0);
+  }
+}
 for (let x = 0; x < 15; x++) {
   pieces.push([]);
   for (let y = 0; y < 15; y++) {
@@ -12,7 +19,8 @@ for (let x = 0; x < 15; x++) {
         'http://www.w3.org/1999/xlink', 'xlink:href', '#piece');
     piece.addEventListener('mouseenter', () => {
       if (piece.getAttribute('fill-opacity') === '1') return;
-      piece.setAttribute('fill', game.black ? 'url(#black)' : 'url(#white)');
+      piece.setAttribute(
+          'fill', game.black_turn ? 'url(#black)' : 'url(#white)');
       piece.setAttribute('fill-opacity', '0.5');
     });
     piece.addEventListener('mouseleave', () => {
@@ -21,13 +29,15 @@ for (let x = 0; x < 15; x++) {
     });
     piece.addEventListener('click', () => {
       if (game.winner || piece.getAttribute('fill-opacity') === '1') return;
-      if (game.aiMode && game.aiTurn) return;
-      piece.setAttribute('fill', game.black ? 'url(#black)' : 'url(#white)');
+      if (game.ai_mode && game.ai_turn) return;
+      piece.setAttribute(
+          'fill', game.black_turn ? 'url(#black)' : 'url(#white)');
       piece.setAttribute('fill-opacity', '1');
       dropPiece(x, y);
+      board[x][y] = game.black_turn ? 1 : -1;
       if (!game.winner) {
-        game.black = !game.black;
-        game.aiTurn = !game.black;
+        game.black_turn = !game.black_turn;
+        game.ai_turn = !game.ai_turn;
       }
     });
     svg.appendChild(piece);
@@ -119,34 +129,32 @@ const Message = (content) => {
 };
 
 const game = {
-  black: true,
-  initialPlayer: 'black',
+  black_turn: true,
+  player_color: 1,
+  ai_mode: false,
   winner: null,
-  aiTurn: false,
-  aiMode: true
-
+  ai_turn: false
 };
 
 setInterval(() => {
-  if (game.aiTurn && !game.winner) {
+  if (game.ai_turn && !game.winner) {
     fetch('/get-ai-move', {
       method: 'POST',
-      body: JSON.stringify({
-        board: pieces,
-        aiPlayer: game.initialPlayer === 'black' ? 'white' : 'black'
-      }),
+      body: JSON.stringify(
+          {board: board, aiPlayer: game.player_color === 1 ? -1 : 1}),
       headers: {'Content-Type': 'application/json'}
     })
         .then(response => response.json())
         .then(data => {
           const {x, y} = data;
           pieces[x][y].setAttribute(
-              'fill', game.black ? 'url(#black)' : 'url(#white)');
+              'fill', game.black_turn ? 'url(#black)' : 'url(#white)');
           pieces[x][y].setAttribute('fill-opacity', '1');
           dropPiece(x, y);
+          board[x][y] = game.player_color ? -1 : 1;
           if (!game.winner) {
-            game.black = !game.black;
-            game.aiTurn = !game.black;
+            game.black_turn = !game.black_turn;
+            game.ai_turn = !game.ai_turn;
           }
         });
   }

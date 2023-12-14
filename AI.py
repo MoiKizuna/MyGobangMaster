@@ -45,9 +45,32 @@ def judge_empty(m, n):
                 else:
                     break  # 如果非空，停止当前方向的检查
             else:
-                break  # 如果超出边界，停止当前方向的检查
+                count += 1
 
     return count == 17  # 如果所有检查的位置都是空的，返回 True
+
+# 判断白子是否赢
+
+
+def judge(m, n):
+    global temp_board
+    # 判断chessboard_position[m][n]在米字方向上是否有五个连续的棋子
+    # 如果有，返回True
+    # 如果没有，返回False
+    directions = [(-1, 0), (1, 0), (-1, 1), (1, -1),
+                  (0, 1), (0, -1), (1, 1), (-1, -1)]
+    count = 1  # 初始点本身
+    for dx, dy in directions:
+        for dist in range(1, 5):  # 检查每个方向上的四个位置
+            x, y = m + dist * dx, n + dist * dy
+            if 0 <= x < 15 and 0 <= y < 15:  # 确保在边界内
+                if temp_board[x][y] == temp_board[m][n]:  # 如果该位置与初始点相同
+                    count += 1
+                else:
+                    break  # 如果不同，停止当前方向的检查
+            else:
+                break
+    return count >= 5  # 如果有连续五个相同的棋子，返回 True
 
 
 def ai(color, deep, pre_evaluate):
@@ -76,7 +99,6 @@ def ai(color, deep, pre_evaluate):
                 temp_board[i][j] = color
                 # 递归评估
                 evaluate = ai(3-color, deep+1, values)
-                print("i,j,value:{},{},{}".format(i, j, evaluate))
                 if color == 2:
                     # 剪枝，如果当前的评估值比最小的pre_evaluate要大就跳过该情况，注意要回溯
                     if evaluate > pre_evaluate:
@@ -91,11 +113,13 @@ def ai(color, deep, pre_evaluate):
                         temp_board[i][j] = 0
                         count += 1
                         return -100000000
+                print("i,j,deep,evaluate:{},{},{},{}".format(
+                    i, j, deep, evaluate))
                 # 如果是白子回合，应当取评估值的最大值
                 if color == 2:
                     # #如果当前白子下法能完成五连，则将evaluate设一个较大的值
-                    # if self.judge(i,j):
-                    #     evaluate = 10000000
+                    if judge(i, j):
+                        evaluate = 10000000
                     if evaluate >= values:
                         values = evaluate
                 # 如果是黑子回合，应当取评估值的最小值

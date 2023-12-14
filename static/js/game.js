@@ -57,7 +57,7 @@ const dropPiece = (x, y) => {
   mark.setAttribute('opacity', '0.7');
   game.winner = checkWinner(x, y);
   if (game.winner) {
-    Message(`游戏结束，${game.winner === 1 ? '黑' : '白'}棋胜利！`);
+    Message(`游戏结束，${game.winner === 'black' ? '黑' : '白'}棋胜利！`);
   }
 };
 
@@ -158,4 +158,4 @@ setInterval(() => {
           }
         });
   }
-}, 1000);
+}, 5000);

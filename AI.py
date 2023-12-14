@@ -1,5 +1,7 @@
 
 global temp_board
+global count
+count = 0
 temp_board = []
 
 
@@ -14,15 +16,17 @@ def calculate_ai_move(board, ai_player):
             # 如果该点为空，假设下在该点，修改棋盘状态
             if temp_board[i][j] == 0:
                 if judge_empty(i, j):
-                    temp_board[i][j] = ai_player
-                    # 计算该下法的价值
-                    evaluate = ai(3 - ai_player, 1, values)
-                    if evaluate > values:
-                        values = evaluate
-                        record[0] = i
-                        record[1] = j
-                    # 回溯
-                    temp_board[i][j] = 0
+                    continue
+                temp_board[i][j] = ai_player
+                # 计算该下法的价值
+                evaluate = ai(3 - ai_player, 1, values)
+                if evaluate > values:
+                    values = evaluate
+                    record[0] = i
+                    record[1] = j
+                # 回溯
+                temp_board[i][j] = 0
+    print("record:{}".format(record))
     return record
 
 
@@ -31,20 +35,24 @@ def judge_empty(m, n):
     global temp_board
     directions = [(-1, 0), (1, 0), (-1, 1), (1, -1),
                   (0, 1), (0, -1), (1, 1), (-1, -1)]
-    count = 1
+    count = 1  # 初始点本身
     for dx, dy in directions:
-        for i in range(1, -1, -1):  # 替代原来的两次循环
-            x, y = m + i * dx, n + i * dy
-            # 判断边界
-            if 0 <= x < 15 and 0 <= y < 15 and temp_board[x][y] == 0:
-                count += 1
+        for dist in range(1, 3):  # 检查每个方向上的两个位置
+            x, y = m + dist * dx, n + dist * dy
+            if 0 <= x < 15 and 0 <= y < 15:  # 确保在边界内
+                if temp_board[x][y] == 0:  # 如果该位置为空
+                    count += 1
+                else:
+                    break  # 如果非空，停止当前方向的检查
             else:
-                break  # 遇到非空位或边界则停止当前方向的检查
+                break  # 如果超出边界，停止当前方向的检查
 
-    return count == 17
+    return count == 17  # 如果所有检查的位置都是空的，返回 True
 
 
 def ai(color, deep, pre_evaluate):
+    global count
+    global temp_board
     # 递归边界
     if deep >= 2:
         temp = evaluateBoard(2, temp_board) - evaluateBoard(1, temp_board)
@@ -55,6 +63,7 @@ def ai(color, deep, pre_evaluate):
         values = -100000000
     else:
         values = 100000000
+
     # 记录values最大的那步棋下的位置
     for i in range(15):
         for j in range(15):
@@ -67,6 +76,7 @@ def ai(color, deep, pre_evaluate):
                 temp_board[i][j] = color
                 # 递归评估
                 evaluate = ai(3-color, deep+1, values)
+                print("i,j,value:{},{},{}".format(i, j, evaluate))
                 if color == 2:
                     # 剪枝，如果当前的评估值比最小的pre_evaluate要大就跳过该情况，注意要回溯
                     if evaluate > pre_evaluate:

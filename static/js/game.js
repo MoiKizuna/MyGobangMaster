@@ -39,6 +39,7 @@ for (let x = 0; x < 15; x++) {
         game.black_turn = !game.black_turn;
         game.ai_turn = !game.ai_turn;
       }
+      getAiMove();
     });
     svg.appendChild(piece);
   }
@@ -136,7 +137,7 @@ const game = {
   ai_turn: false
 };
 
-setInterval(() => {
+function getAiMove() {
   if (game.ai_turn && !game.winner) {
     fetch('/get-ai-move', {
       method: 'POST',
@@ -156,6 +157,8 @@ setInterval(() => {
             game.black_turn = !game.black_turn;
             game.ai_turn = !game.ai_turn;
           }
+          // 在收到响应后再次请求 AI 的移动
+          getAiMove();
         });
   }
-}, 3000);
+}

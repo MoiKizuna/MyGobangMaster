@@ -174,35 +174,41 @@ def evaluateBoard(color, chessboard):
                 # 如果在米子方向上有连续5个子，则
                 # values += 200000;
                 if count >= 5:
-                    values += 200000
+                    values += 1000000
                 elif count == 4:
                     # print("4中止原因：{}".format(record))
                     # 如果有连续4个子并且两边都没有堵住，则
                     # values += 70000;
                     if record[0] == record[1] == 0:
-                        values += 70000
+                        values += 50000
                     # 如果同一个方向有连续4个子并且仅有一边被堵住，则
                     # values += 4000;
                     elif (record[0] == 0 and record[1] == (3-color)) or (record[0] == (3-color) and record[1] == 0):
-                        values += 1000
+                        values += 10000
                 elif count == 3:
                     # print("3中止原因：{}".format(record))
                     # 如果是“活三”的情况，则values += 3000
                     if record[0] == record[1] == 0:
-                        values += 1000
+                        values += 5000
                     # 如果是“活三”被堵住了一边，则values += 500;
                     elif (record[0] == 0 and record[1] == (3-color)) or (record[0] == (3-color) and record[1] == 0):
-                        values += 150
+                        values += 1000
                 elif count == 2:
                     # print("2中止原因：{}".format(record))
                     # 如果连续两个子且两边没有被堵住，values += 2000;
                     if record[0] == record[1] == 0:
-                        values += 1000
+                        values += 500
                     # 如果连续两个子被堵住一边，values += 300;
                     elif (record[0] == 0 and record[1] == (3-color)) or (record[0] == (3-color) and record[1] == 0):
-                        values += 150
+                        values += 200
                 # 如果是 ** * 0 * 的情况，则values += 3000;
                 # 如果是 ** 0 ** 的情况，则values += 2600;
+                if record.count(color) == 4 and record.count(0) == 1 and (record[1] == 0 or record[3] == 0):
+                    values += 3000
+
+                # ** 0 ** 的情况
+                if record.count(color) == 4 and record.count(0) == 1 and record[2] == 0:
+                    values += 2600
 
                 k = 0
                 while k < len(directions_2):
